@@ -27,7 +27,7 @@ Uncomment the following line to initialize the datbase
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-# db_drop_and_create_all()
+db_drop_and_create_all()
 
 
 # ROUTES
@@ -118,11 +118,11 @@ def patch_drink(drink_id):
     if not drink:
         abort(404)
     body = request.get_json()
-    if body['title']:
+    if body.get('title'):
         drink.title = body['title']
-    if body['recipe']:
+    if body.get('recipe'):
         drink.recipe = json.dumps(body['recipe'])
-    elif not (body['title'] or body['recipe']):
+    elif not (body.get('title') or body.get('recipe')):
         abort(400)
     drink.update()
     return jsonify({

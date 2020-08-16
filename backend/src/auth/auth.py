@@ -81,7 +81,10 @@ check_permissions(permission, payload) method
 
 def check_permissions(permission, payload):
     if permission not in payload['permissions']:
-        abort(401)
+        raise AuthError({
+            'code': 'access_not_allowed',
+            'description': 'You don\'t have permissions to get access.'
+        }, 401)
 
 
 '''
@@ -140,15 +143,15 @@ def verify_decode_jwt(token):
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Check audience and issuer.'
             }, 401)
-        except Exception:
+        except Exception as e:
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
-            }, 400)
+            }, 401)
     raise AuthError({
         'code': 'invalid_header',
-                'description': 'Unable to find the appropriate key.'
-    }, 400)
+        'description': 'Unable to find the appropriate key.'
+    }, 401)
 
 
 '''
